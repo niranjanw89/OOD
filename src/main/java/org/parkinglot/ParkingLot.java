@@ -1,4 +1,4 @@
-package org.example;
+package org.parkinglot;
 
 public class ParkingLot {
     private Level[] levels;

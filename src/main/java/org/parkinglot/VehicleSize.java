@@ -1,4 +1,4 @@
-package org.example;
+package org.parkinglot;
 
 public enum VehicleSize {
     Motorcycle,
