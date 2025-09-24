@@ -1,25 +1,37 @@
 package org.threads.executorservice;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class FixedPoolExample {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(100);
-
-    public static Future<Double> getRandom(int i){
-        return executorService.submit(() -> {
-            Thread.sleep((int) (Math.random() * 200));
-            System.out.println(i + " Thread id: " +Thread.currentThread().getId());
-            return Math.random();
-        });
-    }
-
     public static void main(String[] args) {
-        for (int i =0; i<100;i++){
-            getRandom(i);
+        Long startTime = System.currentTimeMillis();
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        for(int i=1;i<10;i++){
+            int finalI = i;
+            executorService.submit(() -> {
+                long res = fact(finalI);
+                System.out.println(res);
+            });
         }
         executorService.shutdown();
+        try {
+            executorService.awaitTermination(4000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Total time: " +(System.currentTimeMillis() - startTime));
+    }
+
+    public static long fact(int num){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        long result = 1;
+        for(int i=1;i<=num;i++){
+            result *= num;
+        }
+        return result;
     }
 }
